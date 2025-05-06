@@ -1,0 +1,95 @@
+Imports Oracle.ManagedDataAccess.Client
+Imports System.IO
+
+Public Class UserPopUp
+
+    Private Const ConnString As String =
+      "User Id=system;Password=march2005;" &
+      "Data Source=(DESCRIPTION=" &
+          "(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1522))" &
+          "(CONNECT_DATA=(SID=xe)))"
+
+    ' Run-time defaults
+    Private Sub UserPopUp_Load(sender As Object, e As EventArgs) _
+        Handles MyBase.Load
+        UserPic.Image = My.Resources.icons8_capture_user_100
+    End Sub
+
+    ' Auto-fetch when the ID is complete
+    Private Sub FirstTwoDigitsTxtBox_TextChanged(
+        sender As Object, e As EventArgs) _
+        Handles FirstTwoDigitsTxtBox.TextChanged,
+                SecondFourDigitsTxtBox.TextChanged
+
+        If FirstTwoDigitsTxtBox.Text.Length = 2 AndAlso
+           SecondFourDigitsTxtBox.Text.Length = 4 Then
+
+            FetchStudentDetails()
+        Else
+            ClearFields()
+        End If
+    End Sub
+
+    Private Sub FetchStudentDetails()
+        Dim studentID = FirstTwoDigitsTxtBox.Text & "-" &
+                        SecondFourDigitsTxtBox.Text
+
+        Try
+            Using conn As New OracleConnection(ConnString)
+                conn.Open()
+                Dim sql = "SELECT first_name, middle_name, last_name, program, image
+                           FROM students
+                           WHERE student_id = :id"
+
+                Using cmd As New OracleCommand(sql, conn)
+                    cmd.Parameters.Add(":id", studentID)
+
+                    Using rdr = cmd.ExecuteReader()
+                        If rdr.Read() Then
+                            ' ★ Populate fields ★
+                            Dim fn = rdr.GetString(0)
+                            Dim mn = If(rdr.IsDBNull(1), "", rdr.GetString(1) & " ")
+                            Dim ln = rdr.GetString(2)
+                            NameTxtBox.Text = $"{fn} {mn}{ln}"
+                            ProgramTxtBox.Text = rdr.GetString(3)
+
+                            ' ★ Show stored photo ★
+                            If Not rdr.IsDBNull(4) Then
+                                Dim blob = DirectCast(rdr(4), Byte())
+                                Using ms As New MemoryStream(blob)
+                                    UserPic.Image = Image.FromStream(ms)
+                                End Using
+                            Else
+                                UserPic.Image = My.Resources.icons8_capture_user_100
+                            End If
+
+                            MessageBox.Show("Student record found!",
+                                            "Lookup OK",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Information)
+                        Else
+                            MessageBox.Show("Student ID not found.",
+                                            "Lookup Failed",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Warning)
+                            ClearFields()
+                        End If
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show("Database error: " & ex.Message,
+                            "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
+            ClearFields()
+        End Try
+    End Sub
+
+    Private Sub ClearFields()
+        NameTxtBox.Clear()
+        ProgramTxtBox.Clear()
+        UserPic.Image = My.Resources.icons8_capture_user_100
+    End Sub
+
+End Class
