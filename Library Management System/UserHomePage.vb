@@ -24,11 +24,11 @@
         windowSwitcher.windowSwitch(Me, New UserBorrowedbooks())
     End Sub
 
-    Private Sub Guna2Button2_Click(sender As Object, e As EventArgs) Handles books_inv_btn.Click
+    Private Sub books_inv_btn_Click(sender As Object, e As EventArgs) Handles books_inv_btn.Click
         windowSwitcher.windowSwitch(Me, New UserBorrowBooks())
     End Sub
 
-    Private Sub UserHomePage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+    Private Sub returned_books_btn_Click(sender As Object, e As EventArgs) Handles returned_books_btn.Click
+        windowSwitcher.windowSwitch(Me, New UserBorrowedbooks())
     End Sub
 End Class

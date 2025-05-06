@@ -45,7 +45,7 @@ Partial Class UserHomePage
         Me.Guna2Panel7 = New Guna.UI2.WinForms.Guna2Panel()
         Me.Guna2Panel8 = New Guna.UI2.WinForms.Guna2Panel()
         Me.Guna2PictureBox4 = New Guna.UI2.WinForms.Guna2PictureBox()
-        Me.Guna2Button4 = New Guna.UI2.WinForms.Guna2Button()
+        Me.returned_books_btn = New Guna.UI2.WinForms.Guna2Button()
         Me.Guna2Panel1 = New Guna.UI2.WinForms.Guna2Panel()
         Me.borrow_books_btn = New Guna.UI2.WinForms.Guna2Button()
         Me.rooms_btn = New Guna.UI2.WinForms.Guna2Button()
@@ -310,22 +310,22 @@ Partial Class UserHomePage
         Me.Guna2PictureBox4.TabStop = False
         Me.Guna2PictureBox4.UseTransparentBackground = True
         '
-        'Guna2Button4
+        'returned_books_btn
         '
-        Me.Guna2Button4.BorderRadius = 10
-        Me.Guna2Button4.DisabledState.BorderColor = System.Drawing.Color.DarkGray
-        Me.Guna2Button4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray
-        Me.Guna2Button4.DisabledState.FillColor = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
-        Me.Guna2Button4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer))
-        Me.Guna2Button4.FillColor = System.Drawing.Color.White
-        Me.Guna2Button4.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Bold)
-        Me.Guna2Button4.ForeColor = System.Drawing.Color.Black
-        Me.Guna2Button4.Location = New System.Drawing.Point(611, 153)
-        Me.Guna2Button4.Name = "Guna2Button4"
-        Me.Guna2Button4.Size = New System.Drawing.Size(371, 119)
-        Me.Guna2Button4.TabIndex = 16
-        Me.Guna2Button4.Text = "Your Returned" & Global.Microsoft.VisualBasic.ChrW(10) & "Book List"
-        Me.Guna2Button4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.returned_books_btn.BorderRadius = 10
+        Me.returned_books_btn.DisabledState.BorderColor = System.Drawing.Color.DarkGray
+        Me.returned_books_btn.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray
+        Me.returned_books_btn.DisabledState.FillColor = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
+        Me.returned_books_btn.DisabledState.ForeColor = System.Drawing.Color.FromArgb(CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer))
+        Me.returned_books_btn.FillColor = System.Drawing.Color.White
+        Me.returned_books_btn.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Bold)
+        Me.returned_books_btn.ForeColor = System.Drawing.Color.Black
+        Me.returned_books_btn.Location = New System.Drawing.Point(611, 153)
+        Me.returned_books_btn.Name = "returned_books_btn"
+        Me.returned_books_btn.Size = New System.Drawing.Size(371, 119)
+        Me.returned_books_btn.TabIndex = 16
+        Me.returned_books_btn.Text = "Your Returned" & Global.Microsoft.VisualBasic.ChrW(10) & "Book List"
+        Me.returned_books_btn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Guna2Panel1
         '
@@ -488,7 +488,7 @@ Partial Class UserHomePage
         Me.ClientSize = New System.Drawing.Size(1366, 768)
         Me.Controls.Add(Me.Guna2Panel7)
         Me.Controls.Add(Me.Guna2Panel8)
-        Me.Controls.Add(Me.Guna2Button4)
+        Me.Controls.Add(Me.returned_books_btn)
         Me.Controls.Add(Me.Guna2Panel5)
         Me.Controls.Add(Me.Guna2Panel6)
         Me.Controls.Add(Me.books_inv_btn)
@@ -533,7 +533,7 @@ Partial Class UserHomePage
     Friend WithEvents Guna2Panel7 As Guna.UI2.WinForms.Guna2Panel
     Friend WithEvents Guna2Panel8 As Guna.UI2.WinForms.Guna2Panel
     Friend WithEvents Guna2PictureBox4 As Guna.UI2.WinForms.Guna2PictureBox
-    Friend WithEvents Guna2Button4 As Guna.UI2.WinForms.Guna2Button
+    Friend WithEvents returned_books_btn As Guna.UI2.WinForms.Guna2Button
     Friend WithEvents Guna2CircleButton1 As Guna.UI2.WinForms.Guna2CircleButton
     Friend WithEvents Guna2Panel9 As Guna.UI2.WinForms.Guna2Panel
     Friend WithEvents Label4 As Label
