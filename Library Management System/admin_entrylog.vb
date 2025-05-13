@@ -1,97 +1,117 @@
 ﻿Imports Oracle.ManagedDataAccess.Client
 Imports System.Data
-Imports System.Drawing
-Imports System.Drawing.Drawing2D
-Imports Guna.UI2.WinForms
 
 Public Class admin_entrylog
+    Dim windowSwitcher As New windowTools()
 
-    Public Sub New()
-        InitializeComponent()
-        ' ─── Window controls ────────────────────────────────────
-        Me.ControlBox = True
-        Me.MinimizeBox = True
-        Me.MaximizeBox = True
+    ' Method to load entry log data into the DataGridView
+    Private Sub LoadEntryLogData()
+        Dim connection As OracleConnection = DatabaseConnection.GetConnection()
 
-        ' ─── Wire up sidebar ────────────────────────────────────
-        InitializeSidebar()
+        If connection IsNot Nothing AndAlso connection.State = ConnectionState.Open Then
+            Dim query As String = "SELECT * FROM EntryLog" ' Replace 'EntryLog' with your actual table name
+            Dim command As New OracleCommand(query, connection)
+            Dim adapter As New OracleDataAdapter(command)
+            Dim dataTable As New DataTable()
+
+            Try
+                ' Fill the DataTable with data from the database
+                adapter.Fill(dataTable)
+
+                ' Bind the DataTable to the DataGridView
+                dgvEntryLog.DataSource = dataTable
+            Catch ex As Exception
+                MessageBox.Show("Error loading entry log data: " & ex.Message)
+            Finally
+                connection.Close()
+            End Try
+        Else
+            MessageBox.Show("Failed to connect to the database.")
+        End If
     End Sub
 
-    ' ───────────────────────────────────────────────────────────
-    ' Hook every Guna2Button in panelSidebar to the same click handler
-    Private Sub InitializeSidebar()
-        For Each ctrl As Control In panelSidebar.Controls
-            If TypeOf ctrl Is Guna2Button Then
-                AddHandler DirectCast(ctrl, Guna2Button).Click, AddressOf SidebarButton_Click
-            End If
-        Next
+    ' Method to load history log data into the DataGridView
+    Private Sub LoadHistoryLogData()
+        Dim connection As OracleConnection = DatabaseConnection.GetConnection()
+
+        If connection IsNot Nothing AndAlso connection.State = ConnectionState.Open Then
+            Dim query As String = "SELECT * FROM HistoryLog" ' Replace 'HistoryLog' with your actual table name
+            Dim command As New OracleCommand(query, connection)
+            Dim adapter As New OracleDataAdapter(command)
+            Dim dataTable As New DataTable()
+
+            Try
+                ' Fill the DataTable with data from the database
+                adapter.Fill(dataTable)
+
+                ' Bind the DataTable to the DataGridView
+                dgvEntryLog.DataSource = dataTable
+            Catch ex As Exception
+                MessageBox.Show("Error loading history log data: " & ex.Message)
+            Finally
+                connection.Close()
+            End Try
+        Else
+            MessageBox.Show("Failed to connect to the database.")
+        End If
     End Sub
 
-    ' ───────────────────────────────────────────────────────────
-    ' Shared handler for all sidebar buttons
-    Private Sub SidebarButton_Click(sender As Object, e As EventArgs)
-        Dim btn = DirectCast(sender, Guna2Button)
-
-        Select Case btn.Name
-            Case "btnDashboard"
-                Dim dash = New admin_dashboard()
-                dash.Show()
-                Me.Hide()
-
-            Case "btnEntlog"
-                ' Already here—optionally refresh your entry‐log grid
-                Return
-
-            Case "btnUsers"
-                Dim users = New admin_users()
-                users.Show()
-                Me.Hide()
-
-            Case "btnBooks"
-                Dim books = New admin_books()
-                books.Show()
-                Me.Hide()
-
-            Case "btnRooms"
-                Dim rooms = New admin_rooms()
-                rooms.Show()
-                Me.Hide()
-
-            Case "btnLogout"
-                Me.Close()
-                admin_login.Show()
-        End Select
+    Private Sub dashbrd_btn_Click(sender As Object, e As EventArgs) Handles dashbrd_btn.Click
+        ' Navigate to the admin dashboard
+        windowSwitcher.windowSwitch(Me, New admin_dashboard())
     End Sub
 
-    ' ───────────────────────────────────────────────────────────
-    ' Form Load: apply window settings & load your entry‐log data
+    Private Sub borrowedreturned_btn_Click(sender As Object, e As EventArgs) Handles borrowedreturned_btn.Click
+        ' Navigate to the borrowed/returned entry log (current page)
+        windowSwitcher.windowSwitch(Me, New admin_entrylog())
+    End Sub
+
+    Private Sub Libbooks_btn_Click(sender As Object, e As EventArgs) Handles Libbooks_btn.Click
+        ' Navigate to the library books management
+        windowSwitcher.windowSwitch(Me, New admin_books())
+    End Sub
+
+    Private Sub meetingrm_btn_Click(sender As Object, e As EventArgs) Handles meetingrm_btn.Click
+        ' Navigate to the meeting room management
+        windowSwitcher.windowSwitch(Me, New admin_rooms())
+    End Sub
+
+    Private Sub rooms_btn_Click(sender As Object, e As EventArgs) Handles rooms_btn.Click
+        ' Navigate to the general rooms management
+        windowSwitcher.windowSwitch(Me, New admin_rooms())
+    End Sub
+
+    Private Sub logout_btn_Click(sender As Object, e As EventArgs) Handles logout_btn.Click
+        ' Navigate to the login screen
+        windowSwitcher.windowSwitch(Me, New admin_login())
+    End Sub
+
     Private Sub admin_entrylog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' ─── FORM SETTINGS ─────────────────────────────────────
-        Me.BackColor = Color.FromArgb(240, 240, 240)
-        Me.WindowState = FormWindowState.Maximized
-        Me.MinimumSize = New Size(900, 800)
+        ' Start the timer to update time and date
+        timeDateTimer.Start()
 
-        ' ─── ENTRY-LOG CONTENT ─────────────────────────────────
-        ' TODO: configure your dgvEntryLog (if you have one) 
-        '       and bind it to a DataTable fetched from your table:
-
-        ' Dim logTable = GetEntryLog()
-        ' dgvEntryLog.DataSource = logTable
+        ' Load the entry log data into the DataGridView
+        LoadEntryLogData()
     End Sub
 
-    Private Sub TableLayoutPanel2_Paint(sender As Object, e As PaintEventArgs) Handles TableLayoutPanel2.Paint
+    ' Event handler for the Timer Tick event
+    Private Sub timeDateTimer_Tick(sender As Object, e As EventArgs) Handles timeDateTimer.Tick
+        ' Update the current time in Label32
+        Label32.Text = DateTime.Now.ToString("hh:mm:ss tt") ' Format: 12-hour clock with AM/PM
 
+        ' Update the current date in Label33
+        Label33.Text = DateTime.Now.ToString("MMMM dd, yyyy") ' Format: Full month name, day, and year
     End Sub
 
-    ' ───────────────────────────────────────────────────────────
-    ' Example stub for loading entry-log data
-    ' Private Function GetEntryLog() As DataTable
-    '     Dim dt As New DataTable()
-    '     Using conn As New OracleConnection(ConnString)
-    '         conn.Open()
-    '         ' … SELECT * FROM admin_entrylog WHERE … …
-    '     End Using
-    '     Return dt
-    ' End Function
+    ' Event handler for btn_history click (Show History Log)
+    Private Sub btn_history_Click(sender As Object, e As EventArgs) Handles btn_history.Click
+        ' Load the history log data into the DataGridView
+        LoadHistoryLogData()
+    End Sub
 
+    Private Sub btn_realtime_Click(sender As Object, e As EventArgs) Handles btn_realtime.Click
+
+    End Sub
 End Class
+
+

@@ -144,6 +144,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddBorrowingForm.Designer.vb">
+      <DependentUpon>AddBorrowingForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AddBorrowingForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="admin_books.Designer.vb">
       <DependentUpon>admin_books.vb</DependentUpon>
     </Compile>
@@ -245,6 +251,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddBorrowingForm.resx">
+      <DependentUpon>AddBorrowingForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="admin_books.resx">
       <DependentUpon>admin_books.vb</DependentUpon>
     </EmbeddedResource>
